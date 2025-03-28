@@ -1,29 +1,58 @@
+import axios from "axios";
 import React from "react";
+import toast from "react-hot-toast";
 import { AiOutlinePlus, AiOutlineMinus } from "react-icons/ai";
 import { MdDelete } from "react-icons/md";
-import { useDispatch } from "react-redux";
-import {
-  removeFromCart,
-  incrementQty,
-  decrementQty,
-} from "../redux/slices/CartSlice";
-import { toast } from "react-hot-toast";
+import { useDispatch, useSelector } from "react-redux";
+import { getCart } from "../helper";
+import { setCart } from "../redux/slices/CartSlice";
+// import {
+//   removeFromCart,
+//   incrementQty,
+//   decrementQty,
+// } from "../redux/slices/CartSlice";
+// import { toast } from "react-hot-toast";
 
-const ItemCard = ({ id, name, qty, price, img }) => {
+const ItemCard = ({ id, name, quantity, price, image, _id}) => {
   const dispatch = useDispatch();
+  const user = useSelector(state => state.auth.user );
+
+  const removeFromCart = async(id) => {
+    if (!user) {
+        toast.error("User not logged in");
+        return;
+    }
+
+    const res = await axios.delete(`http://localhost:5003/api/remove-from-cart/${id}`);
+    const data = res.data;
+    toast.success(data.message);
+
+    getCart(user).then((data) => dispatch(setCart(data.cartItems)));
+};
+
+const incrementQuantity = async(id) => {
+  const res = await axios.put(`http://localhost:5003/api/increment-qty/${id}`);
+  const data = res.data;
+
+  getCart(user).then((data) => dispatch(setCart(data.cartItems)));
+}
+
+const decrementQuantity = async(id) => {
+  const res = await axios.put(`http://localhost:5003/api/decrement-qty/${id}`);
+  const data = res.data;
+
+  getCart(user).then((data) => dispatch(setCart(data.cartItems)));
+}
 
   return (
     <div className="flex gap-2 shadow-md rounded-lg p-2 mb-3">
       <MdDelete
         onClick={() => {
-          dispatch(removeFromCart({ id, img, name, price, qty }));
-          toast(`${name} Removed!`, {
-            icon: "👋",
-          });
+          removeFromCart(_id);
         }}
         className="absolute right-7 text-gray-600 cursor-pointer"
       />
-      <img src={img} alt="" className="w-[50px] h-[50px] " />
+      <img src={image} alt="" className="w-[50px] h-[50px] " />
       <div className="leading-5">
         <h2 className="font-bold text-gray-800">{name}</h2>
         <div className="flex justify-between ">
@@ -31,14 +60,14 @@ const ItemCard = ({ id, name, qty, price, img }) => {
           <div className="flex justify-center items-center gap-2 absolute right-7">
             <AiOutlineMinus
               onClick={() =>
-                qty > 1 ? dispatch(decrementQty({ id })) : (qty = 0)
+                quantity > 1 ? decrementQuantity(_id) : (quantity = 0)
               }
               className="border-2 border-gray-600 text-gray-600 hover:text-white hover:bg-green-500 hover:border-none rounded-md p-1 text-xl transition-all ease-linear cursor-pointer"
             />
-            <span>{qty}</span>
+            <span>{quantity}</span>
             <AiOutlinePlus
               onClick={() =>
-                qty >= 1 ? dispatch(incrementQty({ id })) : (qty = 0)
+                quantity >= 1 ? incrementQuantity(_id) : (quantity = 0)
               }
               className="border-2 border-gray-600 text-gray-600 hover:text-white hover:bg-green-500 hover:border-none rounded-md p-1 text-xl transition-all ease-linear cursor-pointer"
             />

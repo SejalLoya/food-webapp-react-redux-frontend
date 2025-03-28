@@ -5,19 +5,26 @@ import { FaShoppingCart } from "react-icons/fa";
 import ItemCard from "./ItemCard";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+axios.defaults.withCredentials = true;
 
 const Cart = () => {
   const [activeCart, setActiveCart] = useState(false);
 
   const cartItems = useSelector((state) => state.cart.cart);
-  const totalQty = cartItems.reduce((totalQty, item) => totalQty + item.qty, 0);
+  const totalQty = cartItems.reduce((totalQty, item) => totalQty + item.quantity, 0);
   const totalPrice = cartItems.reduce(
-    (total, item) => total + item.qty * item.price,
+    (total, item) => total + item.quantity * item.price,
     0
   );
 
   const navigate = useNavigate();
 
+  const checkout = async() => {
+    const res = await axios.get(`http://localhost:5003/api/checkout`);
+    const {url} = await res.data;
+    window.location.href = url;
+  }
   return (
     <>
       <div
@@ -38,11 +45,7 @@ const Cart = () => {
             return (
               <ItemCard
                 key={food.id}
-                id={food.id}
-                name={food.name}
-                price={food.price}
-                img={food.img}
-                qty={food.qty}
+                {...food}
               />
             );
           })
@@ -59,7 +62,7 @@ const Cart = () => {
           </h3>
           <hr className="w-[90vw] lg:w-[18vw] my-2" />
           <button
-            onClick={() => navigate("/success")}
+            onClick={checkout}
             className="bg-green-500 font-bold px-3 text-white py-2 rounded-lg w-[90vw] lg:w-[18vw] mb-5"
           >
             Checkout

@@ -1,11 +1,38 @@
+import axios from "axios";
 import React from "react";
 import { AiFillStar } from "react-icons/ai";
-import { useDispatch } from "react-redux";
-import { addToCart } from "../redux/slices/CartSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { getCart } from "../helper"; 
+import toast from "react-hot-toast";
+import { setCart } from "../redux/slices/CartSlice";
 
 const FoodCard = ({ id, name, price, desc, img, rating, handleToast }) => {
   const dispatch = useDispatch();
+  const user = useSelector((state) => state.auth.user);
 
+  const addToCart = async ({ id, name, price, img, quantity, rating }) => {
+    try {
+      const res = await axios.post(
+        `http://localhost:5003/api/add-to-cart/${user._id}`,
+        {
+          id,
+          name,
+          image: img, // Ensure the backend expects this key
+          price,
+          rating,
+          quantity,
+        }
+      );
+  
+      const data = res.data;
+      toast.success(data.message);
+      getCart(user).then((data) => dispatch(setCart(data.cartItems)));
+    } catch (error) {
+      toast.error("Failed to add to cart");
+      console.error(error);
+    }
+  };
+  
   return (
     <div className="font-bold w-[250px] bg-white p-5 flex flex-col rounded-lg gap-2">
       <img
@@ -24,10 +51,11 @@ const FoodCard = ({ id, name, price, desc, img, rating, handleToast }) => {
         </span>
         <button
           onClick={() => {
-            dispatch(
-              addToCart({ id, name, price, rating, img, qty: 1 })
-            );
-            handleToast(name);
+            !user ? toast.error("Please login to add to cart") : addToCart({ id, name, price, rating, img, quantity: 1 })
+            // dispatch(
+            //   addToCart({ id, name, price, rating, img, qty: 1 })
+            // );
+            // handleToast(name);
           }}
           className="p-1 text-white bg-green-500 hover:bg-green-600 rounded-lg text-sm"
         >
