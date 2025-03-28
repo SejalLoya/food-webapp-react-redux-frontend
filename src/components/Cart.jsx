@@ -11,12 +11,14 @@ axios.defaults.withCredentials = true;
 const Cart = () => {
   const [activeCart, setActiveCart] = useState(false);
 
-  const cartItems = useSelector((state) => state.cart.cart);
+  const cartItems = useSelector((state) => state.cart.cart) || []; 
+
   const totalQty = cartItems.reduce((totalQty, item) => totalQty + item.quantity, 0);
   const totalPrice = cartItems.reduce(
     (total, item) => total + item.quantity * item.price,
     0
   );
+  
 
   const navigate = useNavigate();
 

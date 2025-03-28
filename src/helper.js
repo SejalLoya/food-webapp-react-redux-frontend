@@ -9,10 +9,9 @@ export const getCart = async (user) => {
         const res = await axios.get(`https://swiggato-nodejs-backend.onrender.com/api/get-cart/${user._id}`, {
             withCredentials: true,
         });
-
-        return res.data;
+        return Array.isArray(res.data) ? res.data : [];
     } catch (error) {
         console.error("Error fetching cart:", error.message);
-        return [];
+        return []; 
     }
 };
