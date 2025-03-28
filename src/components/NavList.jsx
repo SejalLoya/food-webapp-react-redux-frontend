@@ -10,8 +10,8 @@ const NavList = ({toggleNav, setToggleNav, auth}) => {
 
         localStorage.removeItem("user");
         sessionStorage.removeItem("user");
-        
-        window.location.href = "/login";
+
+        window.location.href = "/login?cacheBust=" + new Date().getTime();
     } catch (error) {
         console.log("Logout error:", error.message);
     }
