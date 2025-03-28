@@ -4,12 +4,19 @@ import toast from 'react-hot-toast'
 import { Link } from 'react-router-dom'
 
 const NavList = ({toggleNav, setToggleNav, auth}) => {
-  const handleLogout = async() => {
-    const res = await axios.get("https://swiggato-nodejs-backend.onrender.com/api/logout");
-    const data = await res.data;
-    toast.success(data.message);
-    window.location.href = "/";
-  }
+  const handleLogout = async () => {
+    try {
+        await axios.post("https://swiggato-nodejs-backend.onrender.com/api/logout", {}, { withCredentials: true });
+
+        localStorage.removeItem("user");
+        sessionStorage.removeItem("user");
+        
+        window.location.href = "/login";
+    } catch (error) {
+        console.log("Logout error:", error.message);
+    }
+};
+
   return (
     <div class={`${!toggleNav && "translate-x-[200px]"} fixed top-12 right-5 lg:right-8 p-3 w-fit bg-white bg-opacity-10 backdrop-blur-sm flex flex-col justify-center items-start rounded-lg shadow-md border border-white font-bold text-gray-600 transition-all duration-500 ease-in-out`}>
         {
