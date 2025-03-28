@@ -11,7 +11,7 @@ function VerifyOtp() {
     const handleVerifyOtp = async(e) => {
       e.preventDefault();
       try {
-        const res = await axios.put("http://localhost:5003/api/verify-otp", {
+        const res = await axios.put("https://swiggato-nodejs-backend.onrender.com/api/verify-otp", {
           otp, newPassword:password,
         });
         const data = await res.data;

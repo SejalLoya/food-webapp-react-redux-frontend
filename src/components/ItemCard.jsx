@@ -23,7 +23,7 @@ const ItemCard = ({ id, name, quantity, price, image, _id}) => {
         return;
     }
 
-    const res = await axios.delete(`http://localhost:5003/api/remove-from-cart/${id}`);
+    const res = await axios.delete(`https://swiggato-nodejs-backend.onrender.com/api/remove-from-cart/${id}`);
     const data = res.data;
     toast.success(data.message);
 
@@ -31,14 +31,14 @@ const ItemCard = ({ id, name, quantity, price, image, _id}) => {
 };
 
 const incrementQuantity = async(id) => {
-  const res = await axios.put(`http://localhost:5003/api/increment-qty/${id}`);
+  const res = await axios.put(`https://swiggato-nodejs-backend.onrender.com/api/increment-qty/${id}`);
   const data = res.data;
 
   getCart(user).then((data) => dispatch(setCart(data.cartItems)));
 }
 
 const decrementQuantity = async(id) => {
-  const res = await axios.put(`http://localhost:5003/api/decrement-qty/${id}`);
+  const res = await axios.put(`https://swiggato-nodejs-backend.onrender.com/api/decrement-qty/${id}`);
   const data = res.data;
 
   getCart(user).then((data) => dispatch(setCart(data.cartItems)));

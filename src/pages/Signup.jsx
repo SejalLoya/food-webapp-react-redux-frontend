@@ -19,7 +19,7 @@ const Signup = () => {
         }
 
         try {
-            const res = await axios.post(`http://localhost:5003/api/signup`, { name, email, password });
+            const res = await axios.post(`https://swiggato-nodejs-backend.onrender.com/api/signup`, { name, email, password });
 
             if (res.status === 201 || res.status === 200) {
                 toast.success(res.data.message);

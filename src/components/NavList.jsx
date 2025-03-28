@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 
 const NavList = ({toggleNav, setToggleNav, auth}) => {
   const handleLogout = async() => {
-    const res = await axios.get("http://localhost:5003/api/logout");
+    const res = await axios.get("https://swiggato-nodejs-backend.onrender.com/api/logout");
     const data = await res.data;
     toast.success(data.message);
     window.location.href = "/";

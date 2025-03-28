@@ -12,7 +12,7 @@ const Success = () => {
   }, []);
 
   const clearCart = async() => {
-    const res = await axios.get("http://localhost:5003/api/clear-cart");
+    const res = await axios.get("https://swiggato-nodejs-backend.onrender.com/api/clear-cart");
     const data = await res.data;
     toast.success(data.message);
   };

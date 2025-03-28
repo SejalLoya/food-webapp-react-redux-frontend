@@ -13,7 +13,7 @@ const FoodCard = ({ id, name, price, desc, img, rating, handleToast }) => {
   const addToCart = async ({ id, name, price, img, quantity, rating }) => {
     try {
       const res = await axios.post(
-        `http://localhost:5003/api/add-to-cart/${user._id}`,
+        `https://swiggato-nodejs-backend.onrender.com/api/add-to-cart/${user._id}`,
         {
           id,
           name,

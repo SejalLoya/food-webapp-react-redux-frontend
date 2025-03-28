@@ -9,7 +9,7 @@ const ResetPassword = () => {
     e.preventDefault();
 
     try {
-      const res = await axios.put("http://localhost:5003/api/reset-password", {
+      const res = await axios.put("https://swiggato-nodejs-backend.onrender.com/api/reset-password", {
         email
       });
       const data = await res.data;

@@ -14,7 +14,7 @@ const navigate = useNavigate();
   const handleLogin = async (e) => {
     e.preventDefault();
 
-        const res = await axios.post(`http://localhost:5003/api/login`, { email, password });
+        const res = await axios.post(`https://swiggato-nodejs-backend.onrender.com/api/login`, { email, password });
         const data = await res.data;
         if (res.status === 201 || res.status === 200) {
             dispatch(loginUser);

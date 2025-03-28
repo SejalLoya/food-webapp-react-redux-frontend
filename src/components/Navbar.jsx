@@ -16,7 +16,7 @@ const Navbar = () => {
   const user = useSelector((state) => state.auth.user);
 
   const getUser = async() => {
-    const res = await axios.get(`http://localhost:5003/api/get-user`, {
+    const res = await axios.get(`https://swiggato-nodejs-backend.onrender.com/api/get-user`, {
       withCredentials: true,
     });
 
