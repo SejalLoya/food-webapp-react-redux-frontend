@@ -15,22 +15,30 @@ const Navbar = () => {
   const auth = useSelector((state) => state.auth.isAuth);
   const user = useSelector((state) => state.auth.user);
 
-  const getUser = async() => {
-    const res = await axios.get(`https://swiggato-nodejs-backend.onrender.com/api/get-user`, {
-      withCredentials: true,
-    });
-
-    const data = await res.data;
-    console.log(data);
-    dispatch(setUser(data.user));
-    dispatch(loginUser());
-  };
-
-  getCart(user).then((data) => dispatch(setCart(data.cartItems)));
-
   useEffect(() => {
-    getUser()
-  }, []);
+    const fetchUser = async () => {
+        try {
+            const res = await axios.get(`https://swiggato-nodejs-backend.onrender.com/api/get-user`, {
+                withCredentials: true,
+            });
+
+            const data = res.data;
+            console.log(data);
+            dispatch(setUser(data.user));
+            dispatch(loginUser());
+
+            if (data.user) {
+                const cartData = await getCart(data.user);
+                dispatch(setCart(cartData.cartItems));
+            }
+        } catch (error) {
+            console.error("Error fetching user:", error);
+        }
+    };
+
+    fetchUser();
+}, []);
+
 
   return (
     <nav className="flex flex-col lg:flex-row justify-between py-3 mx-6 mb-10">
