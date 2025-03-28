@@ -1,5 +1,3 @@
-import axios from "axios";
-
 export const getCart = async (user) => {
     if (!user || !user._id) {
         return [];
@@ -9,9 +7,10 @@ export const getCart = async (user) => {
         const res = await axios.get(`https://swiggato-nodejs-backend.onrender.com/api/get-cart/${user._id}`, {
             withCredentials: true,
         });
-        return Array.isArray(res.data) ? res.data : [];
+
+        return res.data;
     } catch (error) {
         console.error("Error fetching cart:", error.message);
-        return []; 
+        return [];
     }
 };
